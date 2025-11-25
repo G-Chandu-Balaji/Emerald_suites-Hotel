@@ -1,0 +1,6 @@
+{
+  "minBookingLength": 1,
+  "maxBookingLength": 14,
+  "maxGuestsPerBooking": 6,
+  "breakfastPrice": 350
+}

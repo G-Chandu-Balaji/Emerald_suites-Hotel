@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import dotenv from "dotenv";
 dotenv.config();
-
+import cabinRoutes from "./Routes/cabin.route.js";
+import bookingRoutes from "./Routes/booking.route.js";
 const app = express();
 
 app.use(express.json());
@@ -17,6 +18,9 @@ mongoose
   .catch((err) => {
     console.log("DB connection error:", err);
   });
+
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/cabins", cabinRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
