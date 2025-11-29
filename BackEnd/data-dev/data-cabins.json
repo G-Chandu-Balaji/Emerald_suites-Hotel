@@ -70,5 +70,43 @@
     "description": "Ultra-modern luxury cabin with panoramic sky views.",
     "maxCapacity": 5,
     "images": ["cabin-skyview-1.jpg", "cabin-skyview-2.jpg"]
+  },
+  {
+    "_id": {
+      "$oid": "69254ebe7af162d91a59287e"
+    },
+    "cabinNumber": 101,
+    "name": "Forest View Deluxe",
+    "regularPrice": 4500,
+    "discount": 3500,
+    "description": "A peaceful cabin with a beautiful forest view.",
+    "maxCapacity": 4,
+    "images": [
+      "https://github.com/jonasschmedtmann/ultimate-react-course/blob/main/17-the-wild-oasis/final-2-after-supabase/src/data/cabins/cabin-001.jpg?raw=true",
+      "cabin-forest-2.jpg"
+    ],
+    "createdAt": {
+      "$date": "2025-11-25T06:37:50.939Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "69254ebe7af162d91a592885"
+    },
+    "cabinNumber": 108,
+    "name": "Luxury Skyview Cabin",
+    "regularPrice": 8500,
+    "discount": 7500,
+    "description": "Ultra-modern luxury cabin with panoramic sky views.",
+    "maxCapacity": 5,
+    "images": [
+      "https://images.unsplash.com/photo-1760067537740-faa11f7bdf1e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHJvb20lMjBuYXR1cmUlMjBob3RlbHxlbnwwfHwwfHx8MA%3D%3D",
+      "cabin-skyview-2.jpg"
+    ],
+    "createdAt": {
+      "$date": "2025-11-25T06:37:50.939Z"
+    },
+    "__v": 0
   }
 ]

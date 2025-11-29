@@ -19,6 +19,9 @@ function SideBar() {
           <li>
             <NavLink to="/bookings">Bookings</NavLink>
           </li>
+          <li>
+            <NavLink to="/cabins">Cabins</NavLink>
+          </li>
         </ul>
       </nav>
     </div>

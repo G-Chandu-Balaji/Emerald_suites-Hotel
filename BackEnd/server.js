@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 import cabinRoutes from "./Routes/cabin.route.js";
 import bookingRoutes from "./Routes/booking.route.js";
@@ -9,6 +10,7 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGODB_URL)
