@@ -16,12 +16,7 @@ const cabinSchema = new mongoose.Schema({
   },
   discount: {
     type: Number,
-    validate: {
-      validator: function (val) {
-        return val < this.regularPrice;
-      },
-      message: "DIscount price {{VALUE}} should be below regular price",
-    },
+    default: 0,
   },
   description: {
     type: String,

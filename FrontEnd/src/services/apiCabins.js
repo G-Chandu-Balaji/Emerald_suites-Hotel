@@ -32,3 +32,21 @@ export const CreateCabin = async (formData) => {
   }
   return data;
 };
+
+export const EditCabin = async ({ id, formdata }) => {
+  const res = await fetch(`http://localhost:5000/api/cabins/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formdata),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to update cabin");
+  }
+
+  return data;
+};
