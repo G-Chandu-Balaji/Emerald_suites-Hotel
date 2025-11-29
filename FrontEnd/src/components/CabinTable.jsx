@@ -1,33 +1,17 @@
 import React, { Fragment, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateCabin, deleteCabin, getCabins } from "../services/apiCabins";
-import toast from "react-hot-toast";
 import CreateCabinForm from "./CreateCabinForm";
+import { useCabins } from "../hooks/useCabins";
+import { useDeleteCabins } from "../hooks/useDeleteCabins";
 
 export default function CabinTable() {
   const [showForm, setShowForm] = useState(false);
   const [editedCabin, setEditedCabin] = useState(null);
-  const querClient = useQueryClient();
 
   //............fetch cabin...........................
-  const { data, isLoading } = useQuery({
-    queryKey: ["cabins"],
-    queryFn: getCabins,
-  });
-
-  const cabins = data?.data?.cabins ?? [];
+  const { cabins, isLoading, isFetching } = useCabins();
 
   //.............delete cabins......................
-  const { isPending: isDeleting, mutate } = useMutation({
-    mutationFn: (id) => deleteCabin(id),
-    onSuccess: () => {
-      toast.success("cabin deleted successfully");
-      querClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const { isDeleting, mutate: DeleteCabin } = useDeleteCabins();
 
   if (isLoading) return <p>Loading cabins...</p>;
 
@@ -53,6 +37,7 @@ export default function CabinTable() {
 
       {/* BODY */}
       <div className="mt-3 space-y-2">
+        {isFetching && <p>Refreshing data...</p>}
         {cabins.map((cabin) => (
           <Fragment key={cabin._id}>
             <div
@@ -98,7 +83,7 @@ export default function CabinTable() {
                 </button>
                 <button
                   className="bg-blue-500 text-amber-100 py-1 px-4 rounded-xl cursor-pointer"
-                  onClick={() => mutate(cabin._id)}
+                  onClick={() => DeleteCabin(cabin._id)}
                   disabled={isDeleting}
                 >
                   Delete

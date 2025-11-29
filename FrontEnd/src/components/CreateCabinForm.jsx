@@ -1,46 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { CreateCabin, EditCabin } from "../services/apiCabins";
-import toast from "react-hot-toast";
 import FormRow from "./FormRow";
+import { useCreateNewCabin } from "../hooks/useCreateNewCabin";
+import { useEditCabin } from "../hooks/useEditCabin";
 
 function CreateCabinForm({ editedCabin = {}, onSuccess }) {
   const { _id: editId, ...editValues } = editedCabin;
-  let isEditing = Boolean(editId);
+  let isEditingSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValues: isEditing ? editValues : {},
+    defaultValues: isEditingSession ? editValues : {},
   });
   const { errors } = formState;
 
-  const queryClient = useQueryClient();
-
   //.....Create a new cabin.................
-  const { mutate: creatingNewCabin, isPending: isCreating } = useMutation({
-    mutationFn: CreateCabin,
-    onSuccess: () => {
-      toast.success("Cabin created successfully");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const { creatingNewCabin, isCreating } = useCreateNewCabin();
 
   //..........Editing the Cabin.................
-  const { mutate: EditingCabin, isPending: isUpdating } = useMutation({
-    mutationFn: EditCabin,
-    onSuccess: () => {
-      toast.success("Cabin edited successfully");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      if (onSuccess) onSuccess();
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const { EditingCabin, isUpdating } = useEditCabin();
 
   function onSubmit(data) {
-    if (isEditing) {
-      EditingCabin({ id: editId, formdata: data });
+    if (isEditingSession) {
+      EditingCabin(
+        { id: editId, formdata: data },
+        {
+          onSuccess: () => {
+            if (onSuccess) onSuccess();
+          },
+        }
+      );
     } else {
-      creatingNewCabin(data);
+      creatingNewCabin(data, {
+        onSuccess: () => reset(),
+      });
     }
   }
 
@@ -53,7 +43,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
         className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg space-y-6 flex flex-col gap-2 "
       >
         <h2 className="text-2xl font-bold self-start text-center mb-6">
-          {isEditing ? "Edit Cabin" : "Create Cabin"}
+          {isEditingSession ? "Edit Cabin" : "Create Cabin"}
         </h2>
         {/* Cabin Number */}
         <FormRow label="Cabin Number" error={errors?.cabinNumber?.message}>
@@ -106,13 +96,13 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
           <input
             id="discount"
             type="number"
-            value={getValues("discount") ?? 0} //
+            // value={getValues("discount") ?? 0} //
             defaultValue={0}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
             {...register("discount", {
               required: "This field is required",
               validate: (value) =>
-                value <= getValues().regularPrice ||
+                Number(value) <= Number(getValues().regularPrice) ||
                 "Discount must be less than Regular Price",
             })}
           />
@@ -136,7 +126,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
             type="text"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-indigo-500"
             {...register("images", {
-              required: isEditing ? false : "This field is required",
+              required: isEditingSession ? false : "This field is required",
             })}
           />
         </FormRow>
@@ -156,7 +146,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
             disabled={isworking}
             className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
           >
-            {isEditing ? "Edit Cabin" : "Create new Cabin"}
+            {isEditingSession ? "Edit Cabin" : "Create new Cabin"}
           </button>
         </div>
       </form>

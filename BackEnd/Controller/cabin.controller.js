@@ -46,6 +46,7 @@ export const deleteCabin = async (req, res) => {
 
 export const CreateNewCabin = async (req, res) => {
   try {
+    console.log(req.body);
     const {
       name,
       maxCapacity,
@@ -55,8 +56,7 @@ export const CreateNewCabin = async (req, res) => {
       description,
       images,
     } = req.body;
-
-    if (discount >= regularPrice) {
+    if (Number(discount) >= Number(regularPrice)) {
       return res.status(400).json({
         status: "fail",
         message: "Discount must be less than Regular Price",

@@ -1,11 +1,11 @@
-export const getCabins = async () => {
+export const getCabinsApi = async () => {
   const res = await fetch("http://localhost:5000/api/cabins");
   if (!res.ok) throw new Error("Failed to fetch cabins");
   const data = res.json();
   return data;
 };
 
-export const deleteCabin = async (id) => {
+export const deleteCabinApi = async (id) => {
   const res = await fetch(`http://localhost:5000/api/cabins/${id}`, {
     method: "DELETE",
   });
@@ -16,7 +16,7 @@ export const deleteCabin = async (id) => {
   return data;
 };
 
-export const CreateCabin = async (formData) => {
+export const CreateCabinApi = async (formData) => {
   const res = await fetch(`http://localhost:5000/api/cabins`, {
     method: "POST",
     headers: {
@@ -33,7 +33,7 @@ export const CreateCabin = async (formData) => {
   return data;
 };
 
-export const EditCabin = async ({ id, formdata }) => {
+export const EditCabinApi = async ({ id, formdata }) => {
   const res = await fetch(`http://localhost:5000/api/cabins/${id}`, {
     method: "PATCH",
     headers: {
