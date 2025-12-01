@@ -50,7 +50,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
           <input
             id="cabinNumber"
             type="number"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
             {...register("cabinNumber", { required: "This field is required" })}
           />
         </FormRow>
@@ -60,7 +60,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
           <input
             id="name"
             type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
             {...register("name", { required: "This field is required" })}
           />
         </FormRow>
@@ -70,7 +70,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
           <input
             id="maxCapacity"
             type="number"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
             {...register("maxCapacity", {
               required: "This field is required",
               min: { value: 1, message: "Capacity should be at least 1" },
@@ -83,7 +83,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
           <input
             id="regularPrice"
             type="number"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
             {...register("regularPrice", {
               required: "This field is required",
               min: { value: 100, message: "Cabin price must be at least 100" },
@@ -98,7 +98,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
             type="number"
             // value={getValues("discount") ?? 0} //
             defaultValue={0}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
             {...register("discount", {
               required: "This field is required",
               validate: (value) =>
@@ -112,7 +112,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
         <FormRow label="Description" error={errors?.description?.message}>
           <textarea
             id="description"
-            className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-lg focus:ring-2  focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
             {...register("description", {
               required: "This field is required",
             })}
@@ -124,7 +124,7 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
           <input
             id="images"
             type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
             {...register("images", {
               required: isEditingSession ? false : "This field is required",
             })}

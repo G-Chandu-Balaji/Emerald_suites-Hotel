@@ -2,6 +2,8 @@ import React, { Fragment, useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useCabins } from "../hooks/useCabins";
 import { useDeleteCabins } from "../hooks/useDeleteCabins";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { useCreateNewCabin } from "../hooks/useCreateNewCabin";
 
 export default function CabinTable() {
   const [showForm, setShowForm] = useState(false);
@@ -12,6 +14,22 @@ export default function CabinTable() {
 
   //.............delete cabins......................
   const { isDeleting, mutate: DeleteCabin } = useDeleteCabins();
+
+  const { creatingNewCabin, isCreating } = useCreateNewCabin();
+
+  function copyCabin(cabin) {
+    const newCabin = {
+      cabinNumber: cabin.cabinNumber + 1000,
+      name: `${cabin.name} (Copy)`,
+      regularPrice: cabin.regularPrice,
+      discount: cabin.discount,
+      description: cabin.description,
+      maxCapacity: cabin.maxCapacity,
+      images: [...cabin.images],
+    };
+
+    creatingNewCabin(newCabin);
+  }
 
   if (isLoading) return <p>Loading cabins...</p>;
 
@@ -73,20 +91,27 @@ export default function CabinTable() {
               {/* EDIT BUTTON */}
               <div className="flex items-center justify-end gap-3">
                 <button
-                  className="bg-blue-500 text-amber-100 py-1 px-4 rounded-2xl cursor-pointer"
+                  disabled={isCreating}
+                  className=" cursor-pointer"
+                  onClick={() => copyCabin(cabin)}
+                >
+                  <HiSquare2Stack />
+                </button>
+                <button
+                  className=" cursor-pointer"
                   onClick={() => {
                     setEditedCabin(cabin);
                     setShowForm((prev) => !prev);
                   }}
                 >
-                  Edit
+                  <HiPencil />
                 </button>
                 <button
-                  className="bg-blue-500 text-amber-100 py-1 px-4 rounded-xl cursor-pointer"
+                  className=" cursor-pointer"
                   onClick={() => DeleteCabin(cabin._id)}
                   disabled={isDeleting}
                 >
-                  Delete
+                  <HiTrash />
                 </button>
               </div>
             </div>

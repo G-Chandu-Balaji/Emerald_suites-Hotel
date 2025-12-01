@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Cabins from "./pages/Cabins";
 import { Toaster } from "react-hot-toast";
+import Settings from "./pages/Settings";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/cabins" element={<Cabins />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
       <Toaster

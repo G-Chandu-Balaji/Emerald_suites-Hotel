@@ -1,14 +1,14 @@
-
-
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaHome, FaBed, FaHotel } from "react-icons/fa";
+import { MdSettings } from "react-icons/md";
 
 function SideBar() {
   const navItems = [
     { name: "Home", path: "/", icon: <FaHome size={20} /> },
     { name: "Bookings", path: "/bookings", icon: <FaBed size={20} /> },
     { name: "Cabins", path: "/cabins", icon: <FaHotel size={20} /> },
+    { name: "Settings", path: "/settings", icon: <MdSettings size={20} /> },
   ];
 
   return (

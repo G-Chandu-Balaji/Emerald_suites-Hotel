@@ -6,6 +6,8 @@ import cors from "cors";
 dotenv.config();
 import cabinRoutes from "./Routes/cabin.route.js";
 import bookingRoutes from "./Routes/booking.route.js";
+import settingsRoutes from "./Routes/settings.route.js";
+
 const app = express();
 
 app.use(express.json());
@@ -23,6 +25,7 @@ mongoose
 
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/cabins", cabinRoutes);
+app.use("/api/settings", settingsRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
