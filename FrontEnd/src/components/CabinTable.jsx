@@ -4,9 +4,12 @@ import { useCabins } from "../hooks/useCabins";
 import { useDeleteCabins } from "../hooks/useDeleteCabins";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateNewCabin } from "../hooks/useCreateNewCabin";
+import Modal from "./Modal";
+import DeleteConfirm from "./DeleteConfirm";
 
 export default function CabinTable() {
   const [showForm, setShowForm] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [editedCabin, setEditedCabin] = useState(null);
 
   //............fetch cabin...........................
@@ -101,14 +104,17 @@ export default function CabinTable() {
                   className=" cursor-pointer"
                   onClick={() => {
                     setEditedCabin(cabin);
-                    setShowForm((prev) => !prev);
+                    setShowForm(true);
                   }}
                 >
                   <HiPencil />
                 </button>
                 <button
                   className=" cursor-pointer"
-                  onClick={() => DeleteCabin(cabin._id)}
+                  onClick={() => {
+                    setDeleteTargetId(cabin._id);
+                  }}
+                  // onClick={() => DeleteCabin(cabin._id)}
                   disabled={isDeleting}
                 >
                   <HiTrash />
@@ -117,10 +123,25 @@ export default function CabinTable() {
             </div>
             {/* Show form only under selected row */}
             {showForm && editedCabin?._id === cabin._id && (
-              <CreateCabinForm
-                editedCabin={editedCabin}
-                onSuccess={() => setShowForm(false)}
-              />
+              <Modal onClose={() => setShowForm(false)}>
+                <CreateCabinForm
+                  editedCabin={editedCabin}
+                  onSuccess={() => setShowForm(false)}
+                  onCloseModal={() => setShowForm(false)}
+                />
+              </Modal>
+            )}
+            {deleteTargetId === cabin._id && (
+              <Modal onClose={() => setDeleteTargetId(null)}>
+                <DeleteConfirm
+                  onCancel={() => setDeleteTargetId(null)}
+                  onDelete={() => {
+                    DeleteCabin(deleteTargetId, {
+                      onSuccess: () => setDeleteTargetId(null),
+                    });
+                  }}
+                />
+              </Modal>
             )}
           </Fragment>
         ))}

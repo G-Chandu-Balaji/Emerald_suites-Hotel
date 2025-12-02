@@ -3,7 +3,7 @@ import FormRow from "./FormRow";
 import { useCreateNewCabin } from "../hooks/useCreateNewCabin";
 import { useEditCabin } from "../hooks/useEditCabin";
 
-function CreateCabinForm({ editedCabin = {}, onSuccess }) {
+function CreateCabinForm({ editedCabin = {}, onSuccess, onCloseModal }) {
   const { _id: editId, ...editValues } = editedCabin;
   let isEditingSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -23,13 +23,16 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
         { id: editId, formdata: data },
         {
           onSuccess: () => {
+            onCloseModal?.();
             if (onSuccess) onSuccess();
           },
         }
       );
     } else {
       creatingNewCabin(data, {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          reset(), onCloseModal?.();
+        },
       });
     }
   }
@@ -37,10 +40,10 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
   const isworking = isCreating || isUpdating;
 
   return (
-    <div className="flex justify-center py-10">
+    <div className={`flex justify-center ${onCloseModal ? "p-0" : "p-4"}  `}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg space-y-6 flex flex-col gap-2 "
+        className="w-full w-max-3xl shadow-lg bg-white p-8 rounded-xl space-y-2 flex flex-col gap-1 "
       >
         <h2 className="text-2xl font-bold self-start text-center mb-6">
           {isEditingSession ? "Edit Cabin" : "Create Cabin"}
@@ -132,10 +135,11 @@ function CreateCabinForm({ editedCabin = {}, onSuccess }) {
         </FormRow>
 
         {/* Buttons */}
-        <div className="flex justify-end gap-4 pt-5">
+        <div className="flex justify-end gap-4 ">
           <button
             type="reset"
             disabled={isworking}
+            onClick={() => onCloseModal?.()}
             className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition"
           >
             Cancel
