@@ -6,15 +6,37 @@ import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateNewCabin } from "../hooks/useCreateNewCabin";
 import Modal from "./Modal";
 import DeleteConfirm from "./DeleteConfirm";
+import ActionMenu from "./ActionMenu";
+import CabinTableOperations from "./CabinTableOperations";
+import { useSearchParams } from "react-router";
 
 export default function CabinTable() {
+  //............fetch cabin...........................
+  const { cabins, isLoading, isFetching } = useCabins();
+
+  //.............................................
   const [showForm, setShowForm] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [editedCabin, setEditedCabin] = useState(null);
 
-  //............fetch cabin...........................
-  const { cabins, isLoading, isFetching } = useCabins();
+  const [searchParams] = useSearchParams();
 
+  //...filterimg
+  const filtervalue = searchParams.get("discount") || "all";
+  let filteredCabins;
+  if (filtervalue == "all") filteredCabins = cabins;
+  if (filtervalue == "no-discount")
+    filteredCabins = cabins.filter((ele) => ele.discount == 0);
+  if (filtervalue == "with-discount")
+    filteredCabins = cabins.filter((ele) => ele.discount > 0);
+
+  //...sortBy
+  const sortBy = searchParams.get("sortBy") || "startDate-asc";
+  const [field, direction] = sortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+  const sortedCabins = filteredCabins.sort(
+    (a, b) => (a[field] - b[field]) * modifier
+  );
   //.............delete cabins......................
   const { isDeleting, mutate: DeleteCabin } = useDeleteCabins();
 
@@ -39,7 +61,11 @@ export default function CabinTable() {
   return (
     <div className="p-6 bg-white rounded-xl shadow-md w-full ">
       {/* HEADER TITLE */}
-      <h2 className="text-2xl font-bold mb-6">All Cabins</h2>
+      <div className="flex justify-between">
+        <h2 className="text-2xl font-bold mb-6">All Cabins</h2>
+        {/* <div className="text-md"> Sort/Filter</div> */}
+        <CabinTableOperations />
+      </div>
 
       {/* HEADER ROW */}
       <div
@@ -59,7 +85,7 @@ export default function CabinTable() {
       {/* BODY */}
       <div className="mt-3 space-y-2">
         {isFetching && <p>Refreshing data...</p>}
-        {cabins.map((cabin) => (
+        {sortedCabins.map((cabin) => (
           <Fragment key={cabin._id}>
             <div
               key={cabin._id}
@@ -92,7 +118,7 @@ export default function CabinTable() {
               </div>
 
               {/* EDIT BUTTON */}
-              <div className="flex items-center justify-end gap-3">
+              {/* <div className="flex items-center justify-end gap-3">
                 <button
                   disabled={isCreating}
                   className=" cursor-pointer"
@@ -114,13 +140,28 @@ export default function CabinTable() {
                   onClick={() => {
                     setDeleteTargetId(cabin._id);
                   }}
-                  // onClick={() => DeleteCabin(cabin._id)}
                   disabled={isDeleting}
                 >
                   <HiTrash />
                 </button>
               </div>
+              
+            </div> */}
+              <div className="flex items-center justify-end gap-3">
+                <ActionMenu
+                  cabin={cabin}
+                  copyCabin={copyCabin}
+                  onEdit={(cabin) => {
+                    setEditedCabin(cabin);
+                    setShowForm(true);
+                  }}
+                  onDelete={(id) => setDeleteTargetId(id)}
+                  isCreating={isCreating}
+                  isDeleting={isDeleting}
+                />
+              </div>
             </div>
+
             {/* Show form only under selected row */}
             {showForm && editedCabin?._id === cabin._id && (
               <Modal onClose={() => setShowForm(false)}>
