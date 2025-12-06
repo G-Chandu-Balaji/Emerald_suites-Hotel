@@ -7,6 +7,7 @@ import path from "path";
 import { cabinModel } from "../Model/cabin.model.js";
 import { guestModel } from "../Model/guest.model.js";
 import { settingModel } from "../Model/setting.model.js";
+import { bookingModel } from "../Model/booking.model.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,15 +22,16 @@ mongoose
   });
 
 //REVIEW - read json file
-const settings = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "data-setting.json"), "utf-8")
+const bookings = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "data-bookings.json"), "utf-8")
 );
 
 const importData = async () => {
   try {
     // await cabinModel.create(cabins);
     // await guestModel.create(guests);
-    await settingModel.create(settings);
+    // await settingModel.create(settings);
+    await bookingModel.create(bookings);
 
     console.log("Data Successfully Loaded");
     process.exit();
