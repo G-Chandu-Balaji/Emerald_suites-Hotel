@@ -2,9 +2,10 @@ import React from "react";
 import { useBookings } from "../hooks/useBookings";
 import BookingTableRow from "../components/BookingTableRow";
 import BookingTableOperations from "../components/BookingTableOperations";
+import Pagination from "../components/Pagination";
 
 function Bookings() {
-  const { bookings, isLoading } = useBookings();
+  const { bookings, isLoading, count } = useBookings();
   if (isLoading) return <p className="p-4 text-gray-600">Loading...</p>;
 
   return (
@@ -33,6 +34,9 @@ function Bookings() {
         {bookings.map((booking) => (
           <BookingTableRow key={booking._id} booking={booking} />
         ))}
+      </div>
+      <div>
+        <Pagination count={count} />
       </div>
     </div>
   );

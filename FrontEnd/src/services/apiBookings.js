@@ -1,4 +1,9 @@
-export const getBookingsApi = async ({ filter, sortBy } = {}) => {
+export const getBookingsApi = async ({
+  filter,
+  sortBy,
+  page,
+  pageSize,
+} = {}) => {
   let url = "http://localhost:5000/api/bookings";
   const params = new URLSearchParams();
 
@@ -11,6 +16,12 @@ export const getBookingsApi = async ({ filter, sortBy } = {}) => {
   //Adding sorting if present
   if (sortBy) {
     params.append("sortBy", sortBy);
+  }
+
+  // ✅ Pagination
+  if (page) {
+    params.append("page", page);
+    params.append("limit", pageSize);
   }
 
   //final url

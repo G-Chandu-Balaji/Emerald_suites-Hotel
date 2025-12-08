@@ -4,7 +4,7 @@ import SortBy from "./SortBy";
 
 function BookingTableOperations() {
   return (
-    <div>
+    <div className="flex items-center gap-2">
       <Filter
         filterField="status"
         options={[

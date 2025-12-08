@@ -22,7 +22,7 @@ export const bookCabin = async (req, res) => {
 
 export const getAllBookings = async (req, res) => {
   try {
-    const { field, value, sortBy } = req.query;
+    const { field, value, sortBy, page = 1, limit = 10 } = req.query;
 
     let mogoFilter = {};
 
@@ -37,17 +37,25 @@ export const getAllBookings = async (req, res) => {
       const [sortFiled, sortOrder] = sortBy.split("-");
       mongoSort[sortFiled] = sortOrder === "desc" ? -1 : 1;
     }
+
+    //Pagination
+    const skip = (page - 1) * limit;
+
     const bookings = await bookingModel
       .find(mogoFilter)
       .sort(mongoSort)
+      .skip(skip)
+      .limit(Number(limit))
       .populate("cabinId", "cabinNumber")
       .populate("guestId", "fullName email");
 
+    const count = await bookingModel.countDocuments(mogoFilter);
     res.status(200).json({
       status: "success",
       result: bookings.length,
       data: {
         bookings,
+        count,
       },
     });
   } catch (err) {
@@ -57,52 +65,3 @@ export const getAllBookings = async (req, res) => {
     });
   }
 };
-// // In your bookings controller file
-// import Booking from "../models/Booking.js"; // Assuming you have a Booking model
-
-// export const getAllBookingsSorting = async (req, res) => {
-//   try {
-//     const { status, sortBy } = req.query;
-
-//     // Build filter object
-//     let filter = {};
-//     if (status && status !== "all") {
-//       filter.status = status; // Assuming 'status' is the field name in your model
-//     }
-
-//     // Build sort object
-//     let sort = {};
-//     if (sortBy) {
-//       // Expected format: 'field-direction' e.g., 'startDate-asc' or 'createdAt-desc'
-//       const [field, direction] = sortBy.split("-");
-
-//       // Validate field name if necessary (security)
-//       const allowedSortFields = [
-//         "createdAt",
-//         "startDate",
-//         "totalPrice",
-//         "status",
-//       ]; // Add your booking fields
-//       if (allowedSortFields.includes(field)) {
-//         sort[field] = direction === "asc" ? 1 : -1;
-//       }
-//     } else {
-//       // Default sort by creation date descending (newest first)
-//       sort.createdAt = -1;
-//     }
-
-//     // Execute query
-//     const bookings = await Booking.find(filter).sort(sort);
-
-//     res.status(200).json({
-//       data: {
-//         bookings,
-//       },
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Failed to fetch bookings",
-//       error: error.message,
-//     });
-//   }
-// };
